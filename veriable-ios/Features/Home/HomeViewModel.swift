@@ -23,6 +23,10 @@ final class HomeViewModel: ObservableObject {
         }
     }
     
+    func refresh() {
+        loadProducts(forceRefresh: true)
+    }
+    
     private func fetchProducts(forceRefresh: Bool) async {
         isLoading = true
         errorMessage = nil
