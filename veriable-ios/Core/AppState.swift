@@ -1,6 +1,14 @@
 import Foundation
 import Combine
 
+enum AppTab: Hashable {
+    case scanner
+    case discover
+    case cart
+    case checkout
+    case settings
+}
+
 /// A class that holds the global state of the application.
 ///
 /// This class is an `ObservableObject` so that SwiftUI views can subscribe to its changes.
@@ -16,11 +24,27 @@ final class AppState: ObservableObject {
     /// The items currently in the user's shopping cart.
     @Published var cartItems: [CartItem] = []
     
+    /// Current loyalty points for the signed-in user.
+    @Published var loyaltyPoints: Int = 0
+    
+    /// Currently selected tab in the main interface.
+    @Published var selectedTab: AppTab = .discover
+    
+    /// Recently scanned detections for history.
+    @Published var scanHistory: [ScanRecord] = []
+    
     // MARK: - Initialization
     
-    init(currentUser: User? = nil, cartItems: [CartItem] = []) {
+    init(currentUser: User? = nil,
+         cartItems: [CartItem] = [],
+         loyaltyPoints: Int = 0,
+         selectedTab: AppTab = .discover,
+         scanHistory: [ScanRecord] = []) {
         self.currentUser = currentUser
         self.cartItems = cartItems
+        self.loyaltyPoints = loyaltyPoints
+        self.selectedTab = selectedTab
+        self.scanHistory = scanHistory
     }
     
     // MARK: - Public Methods
@@ -46,6 +70,22 @@ final class AppState: ObservableObject {
     func clearCart() {
         cartItems.removeAll()
     }
+    
+    /// Adds loyalty points earned from purchases.
+    func addLoyaltyPoints(_ points: Int) {
+        loyaltyPoints += points
+    }
+    
+    func switchTab(_ tab: AppTab) {
+        selectedTab = tab
+    }
+    
+    func addScanRecord(_ record: ScanRecord) {
+        scanHistory.insert(record, at: 0)
+        if scanHistory.count > 50 {
+            scanHistory.removeLast(scanHistory.count - 50)
+        }
+    }
 }
 
 // MARK: - Mock Data
@@ -53,7 +93,11 @@ final class AppState: ObservableObject {
 #if DEBUG
 extension AppState {
     static var mock: AppState {
-        AppState(currentUser: User.mock, cartItems: CartItem.mockItems)
+        AppState(currentUser: User.mock,
+                 cartItems: CartItem.mockItems,
+                 loyaltyPoints: 2450,
+                 selectedTab: .discover,
+                 scanHistory: ScanRecord.mockHistory)
     }
 }
 #endif
