@@ -2,17 +2,40 @@ import SwiftUI
 
 @main
 struct VeriableRetailApp: App {
-#if DEBUG
-    @StateObject private var appState = AppState(currentUser: User.mock)
-#else
     @StateObject private var appState = AppState()
-#endif
     private let environment = AppEnvironment.bootstrap()
     
     var body: some Scene {
         WindowGroup {
-            RootTabView(environment: environment)
-                .environmentObject(appState)
+            Group {
+                if !appState.hasCompletedOnboarding {
+                    OnboardingView(userRepository: environment.userRepository) { user in
+                        appState.login(user: user)
+                        if let cartRepo = environment.cartRepository as? CartRepository {
+                            cartRepo.setUserId(user.id)
+                        }
+                        if let checkoutUseCase = environment.checkoutUseCase as? CheckoutUseCase {
+                            checkoutUseCase.setUserId(user.id)
+                        }
+                    }
+                    .environmentObject(appState)
+                } else if appState.currentUser == nil {
+                    LoginView(environment: environment)
+                        .environmentObject(appState)
+                        .onChange(of: appState.currentUser) { oldValue, newValue in
+                            if let user = newValue {
+                                if let cartRepo = environment.cartRepository as? CartRepository {
+                                    cartRepo.setUserId(user.id)
+                                }
+                                environment.checkoutUseCase.setUserId(user.id)
+                            }
+                        }
+                } else {
+                    RootTabView(environment: environment)
+                        .environmentObject(appState)
+                }
+            }
+            .preferredColorScheme(appState.theme.colorScheme)
         }
     }
 }

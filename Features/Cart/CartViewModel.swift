@@ -18,12 +18,20 @@ final class CartViewModel: ObservableObject {
     
     func loadCart() {
         Task {
-            do {
-                items = try await cartRepository.fetchCartItems()
-                calculateTotal()
-            } catch {
-                logger.error("Failed to load cart: \(error.localizedDescription)")
-            }
+            await loadCartAsync()
+        }
+    }
+    
+    func refreshAsync() async {
+        await loadCartAsync()
+    }
+    
+    private func loadCartAsync() async {
+        do {
+            items = try await cartRepository.fetchCartItems()
+            calculateTotal()
+        } catch {
+            logger.error("Failed to load cart: \(error.localizedDescription)")
         }
     }
     

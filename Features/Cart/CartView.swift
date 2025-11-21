@@ -14,6 +14,9 @@ struct CartView: View {
                 BrandColor.background
                     .ignoresSafeArea()
                 content
+                    .refreshable {
+                        await viewModel.refreshAsync()
+                    }
             }
             .navigationTitle("My Cart")
         }

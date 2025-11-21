@@ -16,7 +16,7 @@ struct User: Codable, Identifiable, Equatable {
 extension User {
     /// A mock user for previews and testing.
     static var mock: User {
-        User(id: 1, name: "Collins Koech", email: "jane.doe@example.com")
+        User(id: 1, name: "Preview User", email: "preview@example.com")
     }
 }
 #endif

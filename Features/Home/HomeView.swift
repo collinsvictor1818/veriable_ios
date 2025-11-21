@@ -18,13 +18,22 @@ struct HomeView: View {
                 BrandColor.background
                     .ignoresSafeArea()
                 content
+                    .refreshable {
+                        await viewModel.refreshAsync()
+                    }
             }
             .navigationTitle("Discover")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: viewModel.refresh) {
-                        Image(systemName: "bell")
-                            .foregroundColor(BrandColor.textPrimary)
+                    NavigationLink(destination: ProfileView()) {
+                        Circle()
+                            .fill(BrandColor.primary.opacity(0.2))
+                            .frame(width: 36, height: 36)
+                            .overlay(
+                                Text(appState.currentUser?.name.prefix(1).uppercased() ?? "?")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(BrandColor.primary)
+                            )
                     }
                 }
             }
@@ -64,55 +73,90 @@ struct HomeView: View {
                            action: { viewModel.loadProducts(forceRefresh: true) })
         } else {
             ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: BrandSpacing.xl) {
-                    heroCard
-                    quickActions
-                    productSection(title: "Just For You")
-                    productSection(title: "Trending Now")
-                    specialOffers
+                VStack(alignment: .leading, spacing: BrandSpacing.lg) {
+                    greetingCard
+                        .padding(.horizontal, BrandSpacing.md) // Reduced horizontal padding for card
+                    
+                    Group {
+                        quickActions
+                        productSection(title: "Just For You")
+                        productSection(title: "Trending Now")
+                        specialOffers
+                    }
+                    .padding(.horizontal, BrandSpacing.lg)
                 }
-                .padding(.horizontal, BrandSpacing.lg)
                 .padding(.vertical, BrandSpacing.lg)
             }
         }
     }
     
-    private var heroCard: some View {
-        VStack(alignment: .leading, spacing: BrandSpacing.sm) {
+    private var greetingName: String {
+        if let name = appState.currentUser?.name.trimmingCharacters(in: .whitespacesAndNewlines), !name.isEmpty {
+            let lower = name.lowercased()
+            let banned = ["test", "preview", "user", "guest"]
+            if banned.contains(where: { lower.contains($0) }) {
+                return "there"
+            }
+            return name
+        }
+        return "there"
+    }
+    
+    private var greetingCard: some View {
+        VStack(alignment: .leading) {
             HStack {
-                VStack(alignment: .leading, spacing: BrandSpacing.xs) {
-                    Text("Hello, \(appState.currentUser?.name ?? "Guest") 👋")
-                        .font(.system(.title2, design: .rounded).weight(.bold))
-                        .foregroundColor(.white)
+                VStack(alignment: .leading) {
+                    HStack{
+                        Text("Hello, \(greetingName)")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.white)
+                        Text("👋")
+                            .font(.system(size: 24))
+                    }
                     Text("Welcome back to Veriable")
-                        .font(.subheadline)
+                        .font(.system(size: 14))
                         .foregroundColor(.white.opacity(0.9))
                 }
+                
                 Spacer()
-                VStack(alignment: .trailing) {
+                
+                VStack(alignment: .trailing, spacing: 4) {
                     Text("Loyalty Points")
-                        .font(.caption)
+                        .font(.system(size: 12))
                         .foregroundColor(.white.opacity(0.8))
-                    Text("\(appState.loyaltyPoints)")
-                        .font(.system(.title, design: .rounded).weight(.bold))
+                    Text("0")
+                        .font(.system(size: 28, weight: .bold))
                         .foregroundColor(.white)
                 }
             }
-            PrimaryButton(title: "Start Scanning") {
+            
+            Button(action: {
+                // Navigate to scanner
                 appState.switchTab(.scanner)
+            }) {
+                Text("Start Scanning")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.white.opacity(0.2))
+                    )
             }
-            .background(
-                RoundedRectangle(cornerRadius: BrandCornerRadius.large)
-                    .fill(Color.white.opacity(0.1))
-            )
         }
         .padding(BrandSpacing.lg)
         .background(
-            LinearGradient(colors: [BrandColor.primary, BrandColor.primary.opacity(0.8)],
-                           startPoint: .topLeading,
-                           endPoint: .bottomTrailing)
-                .cornerRadius(BrandCornerRadius.large)
+            RoundedRectangle(cornerRadius: BrandCornerRadius.large)
+                .fill(
+                    LinearGradient(
+                        colors: [BrandColor.primary, BrandColor.primary.opacity(0.8)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
         )
+        .padding(.horizontal, BrandSpacing.lg)
         .shadow(color: BrandColor.primary.opacity(0.3), radius: 16, x: 0, y: 10)
     }
     
@@ -178,9 +222,17 @@ struct HomeView: View {
         VStack(alignment: .leading, spacing: BrandSpacing.md) {
             Text("Special Offers")
                 .font(.system(.title3, design: .rounded).weight(.semibold))
-            VStack(spacing: BrandSpacing.sm) {
-                offerRow(title: "BOGO Free Pasta", subtitle: "Limited time offer", accent: BrandColor.accent)
-                offerRow(title: "Member Exclusive", subtitle: "50 bonus points", accent: BrandColor.primary.opacity(0.2))
+            if viewModel.promotions.isEmpty {
+                Text("No active promotions")
+                    .font(.caption)
+                    .foregroundColor(BrandColor.textSecondary)
+                    .padding()
+            } else {
+                VStack(spacing: BrandSpacing.sm) {
+                    ForEach(viewModel.promotions) { promotion in
+                        offerRow(title: promotion.title, subtitle: promotion.subtitle, accent: BrandColor.accent)
+                    }
+                }
             }
         }
     }

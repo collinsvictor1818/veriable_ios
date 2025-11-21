@@ -34,7 +34,7 @@ final class CheckoutUseCase: CheckoutUseCaseProtocol {
     
     func execute(items: [CartItem]) async throws {
         guard let userId = currentUserId else {
-            throw AppError.auth(.unauthorized)
+            throw AppError.data(.encodingFailed(NSError(domain: "CheckoutUseCase", code: 401, userInfo: [NSLocalizedDescriptionKey: "User not authenticated"])))
         }
         
         // Calculate total

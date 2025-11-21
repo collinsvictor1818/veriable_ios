@@ -4,6 +4,13 @@ import Foundation
 /// Use this when the backend isn't set up yet.
 struct StubAPIClient: APIClientProtocol {
     func request<T: Decodable>(_ endpoint: Endpoint) async throws -> T {
+        // Provide a stubbed user for auth-related calls (login/sign-up) so the app can proceed in dev
+        if T.self == User.self {
+            let user = User(id: 1001, name: "Demo User", email: "demo@example.com")
+            // Force-cast is safe due to type check above
+            return user as! T
+        }
+
         // Provide sample products for product list endpoints without relying on DEBUG-only mocks.
         if T.self == [Product].self || T.self == Array<Product>.self {
             let samples: [Product] = [

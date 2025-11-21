@@ -2,6 +2,8 @@ import Foundation
 
 protocol UserRepositoryProtocol {
     func login(email: String) async throws -> User
+    func loginWithPassword(email: String, password: String) async throws -> User
+    func createAccount(name: String, email: String, password: String) async throws -> User
 }
 
 final class UserRepository: UserRepositoryProtocol {
@@ -11,25 +13,43 @@ final class UserRepository: UserRepositoryProtocol {
         self.apiClient = apiClient
     }
     
+    // Legacy email-only login (for backward compatibility)
     func login(email: String) async throws -> User {
-        // 1. Try to fetch user by email
         let users: [User] = try await apiClient.request(UserAPI.fetchUser(email: email))
         
-        if let existingUser = users.first {
-            return existingUser
+        if let user = users.first {
+            return user
+        } else {
+            // Create new user if doesn't exist
+            let createRequest = CreateUserRequest(name: email.components(separatedBy: "@").first ?? "User", email: email, password: nil)
+            let createdUser: User = try await apiClient.request(UserAPI.createUser(createRequest))
+            return createdUser
+        }
+    }
+    
+    // Login with password
+    func loginWithPassword(email: String, password: String) async throws -> User {
+        let passwordHash = password.sha256()
+        let users: [User] = try await apiClient.request(UserAPI.loginWithPassword(email: email, passwordHash: passwordHash))
+        
+        guard let user = users.first else {
+            throw AppError.data(.decodingFailed(NSError(domain: "UserRepository", code: 401, userInfo: [NSLocalizedDescriptionKey: "Invalid email or password"])))
         }
         
-        // 2. If not found, create new user
-        let newUserRequest = CreateUserRequest(name: email.components(separatedBy: "@").first ?? "User", email: email)
-        
-        // We need to decode the response which should be the created User
-        // Directus returns the created item wrapped in "data"
-        let createdUser: User = try await apiClient.request(UserAPI.createUser(newUserRequest))
-        return createdUser
+        return user
+    }
+    
+    // Create new account with password
+    func createAccount(name: String, email: String, password: String) async throws -> User {
+        let passwordHash = password.sha256()
+        let createRequest = CreateUserRequest(name: name, email: email, password: passwordHash)
+        let user: User = try await apiClient.request(UserAPI.createUser(createRequest))
+        return user
     }
 }
 
 struct CreateUserRequest: Codable {
     let name: String
     let email: String
+    let password: String?
 }

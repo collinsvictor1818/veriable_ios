@@ -33,6 +33,10 @@ struct RecentScansView: View {
                     }
                 }
             }
+            .refreshable {
+                // Scan history is managed by AppState, just trigger a refresh
+                // In a real app, you might fetch from backend here
+            }
             .navigationTitle("Recent Scans")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

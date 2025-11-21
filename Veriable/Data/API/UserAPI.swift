@@ -3,6 +3,7 @@ import Foundation
 enum UserAPI: Endpoint {
     case fetchUser(email: String)
     case createUser(CreateUserRequest)
+    case loginWithPassword(email: String, passwordHash: String)
     
     var baseURL: String {
         return Config.apiBaseURL
@@ -10,7 +11,7 @@ enum UserAPI: Endpoint {
     
     var path: String {
         switch self {
-        case .fetchUser:
+        case .fetchUser, .loginWithPassword:
             return "/items/app_users"
         case .createUser:
             return "/items/app_users"
@@ -19,7 +20,7 @@ enum UserAPI: Endpoint {
     
     var method: String {
         switch self {
-        case .fetchUser:
+        case .fetchUser, .loginWithPassword:
             return "GET"
         case .createUser:
             return "POST"
@@ -33,6 +34,11 @@ enum UserAPI: Endpoint {
         case .fetchUser(let email):
             components?.queryItems = [
                 URLQueryItem(name: "filter[email][_eq]", value: email)
+            ]
+        case .loginWithPassword(let email, let passwordHash):
+            components?.queryItems = [
+                URLQueryItem(name: "filter[email][_eq]", value: email),
+                URLQueryItem(name: "filter[password][_eq]", value: passwordHash)
             ]
         default:
             break

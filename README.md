@@ -2,6 +2,13 @@
 
 Veriable is an innovative iOS application that combines computer vision, machine learning, and modern e-commerce features to create a seamless shopping experience. The app uses AI to identify products through your camera, manage your shopping cart, and process orders through a robust backend system.
 
+## 📚 Documentation
+
+- **[Setup Guide](SETUP.md)** - Complete installation and configuration guide
+- **[API Documentation](DOCS/API.md)** - Backend API endpoints and usage
+- **[ML Training Guide](DOCS/ML_TRAINING.md)** - Train custom YOLO models
+- **[Deployment Guide](DOCS/DEPLOYMENT.md)** - Production deployment instructions
+
 ## 🎯 What Veriable Does
 
 Veriable transforms the traditional shopping experience by:
