@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct LoginView: View {
+struct AuthLoginView: View {
   @StateObject private var viewModel: AuthViewModel
 
   init(userRepository: UserRepositoryProtocol, onLoginSuccess: @escaping (User) -> Void) {

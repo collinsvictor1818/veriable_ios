@@ -43,7 +43,11 @@ struct ProfileView: View {
               .tag(theme)
           }
         }
+        #if os(iOS)
         .pickerStyle(.navigationLink)
+        #else
+        .pickerStyle(.automatic)
+        #endif
       }
 
       Section(header: Text("Preferences")) {

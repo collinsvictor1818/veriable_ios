@@ -28,7 +28,8 @@
 		CEB308932ECFC33800CD9D6C /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB308922ECFC33800CD9D6C /* ProfileView.swift */; };
 		CEB308952ED0329000CD9D6C /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB308942ED0329000CD9D6C /* OnboardingView.swift */; };
 		CEB308972ED0329800CD9D6C /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB308962ED0329800CD9D6C /* LoginView.swift */; };
-		CEB3089B2ED037C000CD9D6C /* OnboardingViewModel 2.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB3089A2ED037C000CD9D6C /* OnboardingViewModel 2.swift */; };
+		CEB308992ED0378000CD9D6C /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEB308982ED0378000CD9D6C /* OnboardingViewModel.swift */; };
+
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,7 +55,8 @@
 		CEB308922ECFC33800CD9D6C /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		CEB308942ED0329000CD9D6C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		CEB308962ED0329800CD9D6C /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		CEB3089A2ED037C000CD9D6C /* OnboardingViewModel 2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingViewModel 2.swift"; sourceTree = "<group>"; };
+		CEB308982ED0378000CD9D6C /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -119,7 +121,8 @@
 				CEB308922ECFC33800CD9D6C /* ProfileView.swift */,
 				CEB308942ED0329000CD9D6C /* OnboardingView.swift */,
 				CEB308962ED0329800CD9D6C /* LoginView.swift */,
-				CEB3089A2ED037C000CD9D6C /* OnboardingViewModel 2.swift */,
+				CEB308982ED0378000CD9D6C /* OnboardingViewModel.swift */,
+
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -253,7 +256,8 @@
 				CE8BB14E2EC9C322007334B6 /* ObjectScannerView.swift in Sources */,
 				CE227EBE2EC84DC300FAAD1F /* StoreFinderView.swift in Sources */,
 				CEB308972ED0329800CD9D6C /* LoginView.swift in Sources */,
-				CEB3089B2ED037C000CD9D6C /* OnboardingViewModel 2.swift in Sources */,
+				CEB308992ED0378000CD9D6C /* OnboardingViewModel.swift in Sources */,
+
 				CE227E1C2EC8465600FAAD1F /* HomeView.swift in Sources */,
 				CE227E1D2EC8465600FAAD1F /* CheckoutView.swift in Sources */,
 				CE227E1E2EC8465600FAAD1F /* CartView.swift in Sources */,

@@ -12,7 +12,7 @@ struct LoginView: View {
   @State private var errorMessage: String?
   @State private var isSignUp: Bool = false
 
-  init(environment: AppEnvironment, logoImageName: String = "Veriable") {
+  init(environment: AppEnvironment, logoImageName: String = "Image") {
     self.environment = environment
     self.logoImageName = logoImageName
   }
@@ -81,23 +81,6 @@ struct LoginView: View {
           Task { await submit() }
         }
         .disabled(isLoading || email.isEmpty || password.isEmpty)
-
-        Button {
-          // Local demo login fallback
-          let demo = User(
-            id: 9999, name: "Demo User", email: email.isEmpty ? "demo@example.com" : email)
-          appState.login(user: demo)
-        } label: {
-          Text("Continue with Demo")
-            .font(.footnote)
-        }
-        .padding(.top, 4)
-
-        Button(isSignUp ? "Have an account? Sign In" : "New here? Create Account") {
-          isSignUp.toggle()
-        }
-        .font(.footnote)
-        .padding(.top, 8)
         Spacer()
       }
       .padding(24)

@@ -249,7 +249,7 @@ open Veriable.xcworkspace
 ### 4. Verify ML Models
 
 Ensure these files exist in the project:
-- `Veriable/y olo11n.mlpackage/` - Base YOLO model
+- `Veriable/yolo11n.mlpackage/` - Base YOLO model
 - `Veriable/veriable_trained_model.mlpackage/` - Custom trained model
 
 Check in Xcode:

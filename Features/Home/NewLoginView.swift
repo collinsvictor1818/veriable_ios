@@ -38,8 +38,10 @@ struct NewLoginView: View {
             }
             .font(.system(size: 18))
             .foregroundColor(.white)
-            .keyboardType(.emailAddress)
-            .autocapitalization(.none)
+            #if os(iOS)
+              .keyboardType(.emailAddress)
+              .autocapitalization(.none)
+            #endif
             .padding()
             .background(
               RoundedRectangle(cornerRadius: 16)

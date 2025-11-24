@@ -4,23 +4,28 @@ import Foundation
 ///
 /// This struct links a `Product` with a quantity. It is `Identifiable` by the
 /// product's ID for use in SwiftUI lists.
-struct CartItem: Codable, Identifiable, Equatable {
-    var id: Int { product.id }
-    let product: Product
-    var quantity: Int
+public struct CartItem: Codable, Identifiable, Equatable {
+  public var id: Int { product.id }
+  public let product: Product
+  public var quantity: Int
+
+  public init(product: Product, quantity: Int) {
+    self.product = product
+    self.quantity = quantity
+  }
 }
 
 // MARK: - Mock Data
 
 #if DEBUG
-extension CartItem {
+  extension CartItem {
     /// An array of mock cart items for previews and testing.
     static var mockItems: [CartItem] {
-        [
-            CartItem(product: Product.mockProducts[0], quantity: 1),
-            CartItem(product: Product.mockProducts[1], quantity: 2),
-            CartItem(product: Product.mockProducts[2], quantity: 1)
-        ]
+      [
+        CartItem(product: Product.mockProducts[0], quantity: 1),
+        CartItem(product: Product.mockProducts[1], quantity: 2),
+        CartItem(product: Product.mockProducts[2], quantity: 1),
+      ]
     }
-}
+  }
 #endif

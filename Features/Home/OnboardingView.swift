@@ -162,7 +162,9 @@ struct NameStepView: View {
           )
           .padding(.horizontal, 20)
           .focused($isFocused)
-          .submitLabel(.next)
+          #if os(iOS)
+            .submitLabel(.next)
+          #endif
           .onSubmit {
             if viewModel.canProceed {
               viewModel.nextStep()
@@ -221,7 +223,9 @@ struct EmailStepView: View {
             .keyboardType(.emailAddress)
             .autocapitalization(.none)
             .focused($isFocused)
-            .submitLabel(.next)
+            #if os(iOS)
+              .submitLabel(.next)
+            #endif
             .onSubmit {
               if viewModel.canProceed {
                 viewModel.nextStep()
@@ -300,7 +304,9 @@ struct PasswordStepView: View {
           .font(.system(size: 18))
           .foregroundColor(.white)
           .focused($isFocused)
-          .submitLabel(.done)
+          #if os(iOS)
+            .submitLabel(.done)
+          #endif
           .onSubmit {
             if viewModel.canProceed {
               viewModel.nextStep()
